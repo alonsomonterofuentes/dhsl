@@ -16,7 +16,7 @@ def opciones_menu(lista):
 		print "\n"
 		for item in lista:	
 				print str(lista.index(item)+1)+"."+item
-		x = raw_input("\nSeleccione una opcion:\n-Si es la primera vez que usa el programa, escoger la opcion 1")
+		x = raw_input("\nSeleccione una opcion:\n-Si es la primera vez que usa el programa, escoger la opcion 1\n")
 		x = int(x)
 		print "Se selecciono:"
 		print lista[x-1]
