@@ -29,5 +29,5 @@ sleep(1)
 banner("Que desea hacer?")
 opciones_menu_principal = ["Configurar servidor","Ver info de sensores","Controlar actuador", "Salir"]
 opciones_menu(opciones_menu_principal)
-x = conf()
+x = conf("Abanico","estado","1")
 
