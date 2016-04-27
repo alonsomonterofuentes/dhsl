@@ -65,6 +65,7 @@ void loop(){
       while(hayMovimiento(valorSensibilidadInt) == true){
          ctrl_light(valorMaxInt);     
       }//termina while haymovimiento ==true
+      while(hayMovimiento(valorSensibilidadInt) == false){digitalWrite(led,LOW);}
     }//termina while [0] = '0'
     if(inputServer[0]=='1'){ //pide control manual encendido
       if(inputServer[1]=='0'){
