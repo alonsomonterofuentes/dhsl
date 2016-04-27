@@ -39,16 +39,18 @@ def opciones_menu(lista):
 def seleccion_principal(opcion):
 		if(opcion == 1 ):
 				configurar_servidor()
+		elif(opcion ==2):
+			os.system("vim config.ini")
 def configurar_servidor():
 	banner("Configurar Servidor")
 	secciones = conf.Config.sections()
 	opciones_menu(secciones)
-	configurar_sec(secciones,getN())
+	configurar_sec(secciones,getN()-1)
 
 def configurar_sec(secciones,seccion):
 	banner("Configurar "+secciones[seccion])	
+	print "debe ingresar el nombre"
 	opciones_menu(conf.Config.options(secciones[seccion]))
-	
 def principal():
 	#ensena el banner de bienvenido por medio segundo
 	banner("Bienvenido/a a la casa inteligente")
@@ -57,7 +59,7 @@ def principal():
 	banner("Que desea hacer?")
 	print "-Si es la primera vez que usa el programa, escoger la opcion 1\n"
 	#estas son las opciones del menu principal, se dan como un vector a opciones_menu para que las despliegue
-	opciones_menu_principal = ["Configurar servidor(editor)","Configurar servidor(Nano)","Ver info de sensores","Controlar actuador", "Volver"]
+	opciones_menu_principal = ["Configurar servidor(Menu)","Configurar servidor(vim)","Ver info de sensores","Controlar actuador", "Volver"]
 	opciones_menu(opciones_menu_principal)
 	seleccion_principal(getN())
 	#confWrite.set("Abanico","estado","2")
