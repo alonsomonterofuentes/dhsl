@@ -1,54 +1,52 @@
-const int outPin = 13; // Pin dedicado a la salida
-const int inPin = A0; // Pin dedicado a la entrada
-int sensorValue = 0;
+const int led = 13;
+const int fotoresistor = A0;
+int valorFotoresistor = 0;
 int i;
-int first_input_server;
-int second_input_server;
-int value_max;
-char input_server[6];
+int valorMaxInt;
+char inputServer[6];
+char valorMaxChar[4];
 String x;
 
-
-
- 
 void setup(){
   // Se declara el pin como salida
- pinMode(outPin, OUTPUT) ;
+ pinMode(led, OUTPUT) ;
   // Configuracion de la conexion y velocidad
  Serial.begin(9600);
  // Se declara el pin como entrada
- pinMode(inPin, INPUT);
+ pinMode(fotoresistor, INPUT);
 }
 
 void ctrl_light(int a){
-  sensorValue = analogRead(inPin);
-  if (sensorValue < a ){
-    digitalWrite(outPin, HIGH);    
+    valorFotoresistor = analogRead(fotoresistor);
+  if (valorFotoresistor < a ){
+    digitalWrite(led, HIGH);    
   }
   else {
-    digitalWrite(outPin, LOW);
+    digitalWrite(led, LOW);
   }
 }
 
 void loop(){
-  while(Serial.available()){
+ while(Serial.available()){
     x = Serial.readString();
-    x.toCharArray(input_server,6);
-    first_input_server = atoi(&input_server[0]);
-    second_input_server = atoi(&input_server[1]);
-    value_max = atoi(&input_server[2-4]);
-    switch(first_input_server){
-      case '0':
-        ctrl_light(value_max);  
-        break;
-      case '1':
-        if(second_input_server) {
-          digitalWrite(outPin, LOW);
-        }
-        else {
-          digitalWrite(outPin, HIGH);
-        }
-        break;
-      }
-  }
-}
+    x.toCharArray(inputServer,6);
+    valorMaxChar[0] = inputServer[2];
+    valorMaxChar[1] = inputServer[3];
+    valorMaxChar[2] = inputServer[4];
+    valorMaxInt = atoi(valorMaxChar);
+    while(inputServer[0]=='0'){ //pide control manual apagado
+      if(Serial.available()){
+      break;
+      }//termina if serialavailable
+     ctrl_light(valorMaxInt);     
+    }//termina while [0] = '0'
+    if(inputServer[0]=='1'){ //pide control manual encendido
+      if(inputServer[1]=='0'){
+         digitalWrite(led, LOW);
+      }//termina if estado apagado
+      else if(inputServer[1]=='1'){
+         digitalWrite(led, HIGH);
+      }//termina if estado apagado
+    }//termina if control manual
+  }//termina while serialavailable
+}//termina loop
