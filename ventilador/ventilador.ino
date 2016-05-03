@@ -21,6 +21,14 @@ double temperaturaCentigrados():
 		double temperaturaC = pow(0.003356 + log(resistencia/50)*0.0002379, -1) -273;
 		return temperaturaC;
 
+void encenderVentilador(){ 
+		digitalWrite(motor, HIGH); 
+}
+
+void encenderVentilador(){
+		digitalWrite(motor, LOW);
+}
+
 void recibirDatos(){  //Recibe dato Serial y obtiene el valor de la sensibilidad del terminstor
 	while(Serial.available()){
 		lecturaSerial=Serial.readString();
@@ -32,6 +40,21 @@ void recibirDatos(){  //Recibe dato Serial y obtiene el valor de la sensibilidad
 		valorSensibilidad = atoi(valorSensibilidadChar);
 	}
 }
+
+
+void controlManual(){
+		if(controlManualActivado(serverInput[0])==true){	
+				if(serverInput[1]=='0'){
+						apagarVentilador();
+				}
+				else if(serverInput[1] == '1'){
+						encenderVentilador();
+				}				
+		}
+		//(controlManualActivado(serverInput[0])==false){
+		else if(controlManualActivado(serverInput[0])==false){controlAutomatico();}
+}
+
 
 void controlAutomatico(){
 				while(Serial.available()==false){
