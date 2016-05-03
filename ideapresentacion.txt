@@ -6,3 +6,5 @@
 20>camara
 40>protocolo
 30>mejoras
+
+todo en segundos
