@@ -20,6 +20,19 @@ double temperaturaCentigrados():
 		double resistencia = (voltage)/(5-(voltage));
 		double temperaturaC = pow(0.003356 + log(resistencia/50)*0.0002379, -1) -273;
 		return temperaturaC;
+
+void recibirDatos(){  //Recibe dato Serial y obtiene el valor de la sensibilidad del terminstor
+	while(Serial.available()){
+		lecturaSerial=Serial.readString();
+		lecturaSerial.toCharArray(serverInput,6);
+		valorMaxInt=atoi(valorMaxChar);
+		valorSensibilidadChar[0] = serverInput[2];
+		valorSensibilidadChar[1] = serverInput[3];
+		valorSensibilidadChar[2] = serverInput[4];
+		valorSensibilidad = atoi(valorSensibilidadChar);
+	}
+}
+
 void ctrl_temp(int a){
      if(temperaturaCentigrados > a){ //se define el parametro  bajo el cual se encendera el motor
      digitalWrite(motor, HIGH);
