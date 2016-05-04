@@ -100,8 +100,6 @@ void controlAutomatico(){
 }//termina control automatico
 void loop(){
 		recibirDatos();
-		if(hayMovimiento(lecturaUltrasonico(),valorSensibilidadInt)==true){Serial.println('1');}
-		if(hayMovimiento(lecturaUltrasonico(),valorSensibilidadInt)==false){Serial.println('0');}
 		controlManual();
 		}//termina loop	
 
