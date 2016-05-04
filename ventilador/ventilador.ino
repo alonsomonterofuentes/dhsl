@@ -33,14 +33,16 @@ void recibirDatos(){  //Recibe dato Serial y obtiene el valor de la sensibilidad
 	}
 }
 
-void ctrl_temp(int a){
-     if(temperaturaCentigrados > a){ //se define el parametro  bajo el cual se encendera el motor
-     digitalWrite(motor, HIGH);
-     }
-     else{   //sino el motor se apaga 
-     digitalWrite(motor, LOW);
+void controlAutomatico(){
+				while(Serial.available()==false){
+						if(temperaturaCentigrados > valorSensibilidad ){ //se define el parametro  bajo el cual se encendera el motor
+								encenderMotor();
+				}
+						else{   //sino el motor se apaga 
+								apagarMotor();
      }
      delay(1000);                                     //esperar un segundo
+    }
 }
 boolean controlManualActivado(char inputUsuario){
 		if(inputUsuario == '1'){return true;}
