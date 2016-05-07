@@ -1,27 +1,19 @@
-#include <math.h> //se añade el paquete math.h 
-//se declaran las variables
-const int termistor = A0;       //Se adjudica sensorPin al pin 0.
-const int motor = 9;     //Se adjudica motor al pin 9.
-int sensorValue = 0; //
-int i;
-int first_input_server;
-int second_input_server;
-int value_max;
-int valorSensibilidad;
-int valorMaxInt;
-char input_server[6];
-char valorMaxChar;
-char valorSensibilidadChar;
-String x;
-String lecturaSerial;
+#include <math.h> 
+
+const int termistor = A0, motor = 9;;
+int sensorValue = 0, i, value_max, valorSensibilidadInt, valorMaxInt;
+char input_server[6], valorMaxChar, valorSensibilidadChar[5];
+String x, lecturaSerial;
 double temperaturaC;
 
-void setup()
-{
+//se inicializan los pines y el serial
+void setup(){
       Serial.begin(9600);
       pinMode(termistor, INPUT);     
       pinMode(motor, OUTPUT);  
 }
+
+//retorna lo que lee el fotoresistor en grados centigrados
 double temperaturaCentigrados(){
 		int lecturaTermistor = analogRead(termistor);
 		double voltage = (lecturaTermistor * 5.0) / (1023);
@@ -30,39 +22,47 @@ double temperaturaCentigrados(){
 		return temperaturaC;
 }
 
+//enciende el motor
 void encenderMotor(){ 
 		digitalWrite(motor, HIGH); 
 }
 
+//apaga el motor
 void apagarMotor(){
 		digitalWrite(motor, LOW);
 }
+
+//compara lo que lee el termistor con el valor establecido por el usuario para encender o apagar el motor
 void controlAutomatico(){
-				while(Serial.available()==false){
-						if(temperaturaC > valorSensibilidad ){ //se define el parametro  bajo el cual se encendera el motor
-								encenderMotor();
+		while(Serial.available()==false){
+				if(temperaturaCentigrados() > valorSensibilidadInt ){ 
+						encenderMotor();
 				}
-						else{   //sino el motor se apaga 
-								apagarMotor();
-     }
-     delay(1000);                                     //esperar un segundo
+				else{   
+						apagarMotor();
+				}
     }
 }
-void recibirDatos(){  //Recibe dato Serial y obtiene el valor de la sensibilidad del terminstor
+
+//lee los datos recibidos por serial, los convierte a un string para ser analizados
+void recibirDatos(){  
 	while(Serial.available()){
 		lecturaSerial=Serial.readString();
-		lecturaSerial.toCharArray(input_server,6);
-//		valorMaxInt=atoi(valorMaxChar);
+		lecturaSerial.toCharArray(input_server,7);
 		valorSensibilidadChar[0] = input_server[2];
 		valorSensibilidadChar[1] = input_server[3];
 		valorSensibilidadChar[2] = input_server[4];
-		valorSensibilidad = atoi(valorSensibilidadChar);
+		valorSensibilidadInt = atoi(valorSensibilidadChar);
 	}
 }
+
+//retorna verdadero si el usuario activo el control manual, sino retorna falso
 boolean controlManualActivado(char inputUsuario){
 		if(inputUsuario == '1'){return true;}
 		else if(inputUsuario == '0'){return false;}
-}//termina controlmanual activado
+}
+
+//si el control manual fue activado se revisa el estado que pide el usuario para el led
 void controlManual(){
 		if(controlManualActivado(input_server[0])==true){	
 				if(input_server[1]=='0'){
@@ -75,26 +75,9 @@ void controlManual(){
 		else if(controlManualActivado(input_server[0])==false){controlAutomatico();}
 }
 
-void loop()                     // Los siguientes comandos se ejecutan en ciclo.
- {
-    while(Serial.available()){
-    x = Serial.readString();
-    x.toCharArray(input_server,6);
-    first_input_server = atoi(&input_server[0]);
-    second_input_server = atoi(&input_server[1]);
-    value_max = atoi(&input_server[2-4]);
-    switch(first_input_server){
-      case '0':
-        ctrl_temp(value_max);  
-        break;
-      case '1':
-        if(second_input_server) {
-          apagarMotor();
-        }
-        else {
-          encenderMotor();
-        }
-        break;
-      }
-  }
+//funcion principal que corre el ciclo infinito
+void loop(){
+		recibirDatos();
+		controlManual();
 }
+
