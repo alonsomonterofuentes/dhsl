@@ -1,3 +1,9 @@
+<H1>Domótica con Herramientas de software Libre</H1>
+<ul>
+<li>Alonso Montero
+<li>Brian Morera
+<li>Isaac Gómez
+</ul>
 <H1>Instrucciones de Instalación y Uso</H1>
 <H2>Requerimientos</H2>
 <ul>
